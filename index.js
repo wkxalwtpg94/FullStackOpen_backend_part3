@@ -53,6 +53,19 @@ app.get(`/api/persons/:id`, (request, response) => {
 
 app.post("/api/persons", (request, response) => {
     const person = request.body
+    const personMatch = persons.find((p) => p.name === person.name )
+    
+    if (!person.name) {
+        return response.status(400).json({
+            error: "name missing"
+        })
+    } else if (personMatch) {
+        return response.status(400).json({
+            error:"name already exists in the phonebook"
+        })
+    }
+    
+
     person.id = Math.round(Math.random() * 1000000000)
     persons = persons.concat(person)
     response.json(person)
