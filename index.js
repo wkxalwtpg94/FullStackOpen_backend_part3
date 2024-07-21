@@ -5,7 +5,15 @@ var morgan = require("morgan")
 
 app.use(express.json())
 
-app.use(morgan("tiny"))
+morgan.token("data", function (req, res) {
+    const sliced = Object.fromEntries(
+        Object.entries(req.body).slice(1)
+    )
+    
+    return (JSON.stringify(sliced))
+})
+
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :data"))
 
 
 let persons = [
@@ -75,8 +83,6 @@ app.post("/api/persons", (request, response) => {
     persons = persons.concat(person)
     response.json(person)
 })
-
-
 
 
 const PORT = 3001
