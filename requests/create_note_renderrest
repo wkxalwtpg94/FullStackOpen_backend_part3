@@ -1,8 +1,8 @@
-POST http://localhost:3001/api/persons
+POST https://fullstackopen-backend-part3-l7p7.onrender.com/api/persons
 Content-Type: application/json
 
 {
     "id": "",
-    "name": "Dave Salvadaro",
+    "name": "Manpaper",
     "number": "29293930-33331"
 }
