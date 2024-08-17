@@ -83,17 +83,39 @@ app.post("/api/persons", (request, response) => {
         return response.status(400).json({
             error: "name missing"
         })
-    } 
-    
-    const person = new Person ({
-      name: body.name,
-      number: body.number,
-    })
+    } else {Person.exists({name: body.name})
+              .then(exists => {
+                if (exists) {
+                  console.log("Name already exists, can use PUT request")
+                  Person.findOneAndUpdate(
+                    {name:body.name},
+                    {number: body. number},
+                    {new: true, runValidators: true}
+                  )
+                    .then(updatedPerson => {
+                      response.json(updatedPerson)
+                    })
+                    .catch(error => {
+                      console.error(error);
+                      response.status(400).json({
+                        error:"error updating phone number"
+                      })
+                    })
+                  
+                  
+                } else {
+                  console.log("time to create a new NAME")
+                  const person = new Person ({
+                    name: body.name,
+                    number: body.number,
+                  })
 
-    person.save().then(savedPerson => {
-      response.json(savedPerson)
-    })
-    
+                  person.save().then(savedPerson => {
+                    response.json(savedPerson)
+                  })
+                }
+              })
+    }    
 })
 
   app.delete("/api/persons/:id", (request, response, next) => {
